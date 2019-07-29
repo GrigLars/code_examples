@@ -1,8 +1,14 @@
 #!/bin/bash
 # 
 # This is an example of a huge bash report, which, really, should be written in python but I didn't have a python interpreter at the time
-#   and my python skills were still low, boto3 wasn't out yet, excuses excuses.  But what a bash file, huh?  WOW-WIE.
+#   and my python skills were still low, boto3 wasn't out yet, excuses excuses.  But what a bash file, huh?  WOW-WIE.  This
+#   will:
+#   - Get your current AWS EC2 inventory
+#   - Check for various versions of things (docker, php, etc)
+#   - Parse it out to spreadsheets (csv files)
+#   - Setup a web page which can be pushed to a web server
 # 
+# For debugging purposes
 # set -eu
 
 # The way I have this is that that are two profiles in my ~/.aws/config set up thusly (and a default)
@@ -18,7 +24,7 @@
 #   region = us-east-1
 # export AWS_DEFAULT_PROFILE=examplco
 
-# *** NOTE: THIS IS NEEDED TO RUN AS A CRONJOB
+# *** NOTE: THIS IS NEEDED IF IT IS TO BE RUN AS A CRONJOB
 export HOME=/home/glarson
 # ... or wherever your aws config is
 
@@ -37,7 +43,6 @@ export HOME=/home/glarson
 # Client Email     - Project contact email
 # Notes            - Any extra weird, but VITAL information 
 # Windows Version  - If a Windows swerver, what version? [Windows only]
-
 
 DATE_INVENTORY=$(date -Ins | awk -F, '{print $1}')
 
@@ -67,7 +72,7 @@ SSH_COMMAND="ssh -qt -i ${ANSIBLE_KEY} -o ConnectTimeout=5 -o StrictHostKeyCheck
 AWS_COMMAND="/home/glarson/.local/bin/aws" 	# Note, due to the python nature, this has to be a full path
 
 # Note, all arrays have to be declared or else you'll get errors like:
-#    get_aws_reports.bash: line 341: i-00c62f6d92f3f1ca5: value too great for base (error token is "00c62f6d92f3f1ca5")
+#    get_aws_reports.bash: line 341: i-00c62f6d925551212: value too great for base (error token is "00c62f6d925551212")
 #  because bash interprets certain strings of instance IDs that start with "0" as octal
 
 # Hashes                                # Explanations/Examples/Formats
@@ -79,7 +84,7 @@ declare -A INSTANCE_KEYPAIR             #  EXAMPLE-CO-EC2-May-2016
 declare -A INSTANCE_OS_TYPE             #  linux/windows
 declare -A INSTANCE_PRIVATE_IP          #  10.50.4.1
 declare -A INSTANCE_PUBLIC_IP           #  23.45.1.6
-declare -A INSTANCE_RESERVATION_ID      #  1764303f-723f-47d7-838c-2d6cc5f2edcb
+declare -A INSTANCE_RESERVATION_ID      #  1764303f-723f-47d7-838c-2d6cc5551212
 declare -A INSTANCE_STATE               #  running/stopped
 declare -A INSTANCE_TYPE                #  t2.large
 
