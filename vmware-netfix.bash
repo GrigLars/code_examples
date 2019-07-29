@@ -156,8 +156,8 @@ ResetNetNIC () {
                 FIXEDNETMASK=$TEMPMASK
         fi
         FIXEDGATEWAY=$(echo $FIXEDIP | cut -d. -f1,2,3)
-        if [ "$FIXEDGATEWAY" == "10.100.10" ]; then
-		FIXEDGATEWAY="10.100.10.254"
+        if [ "$FIXEDGATEWAY" == "10.111.11" ]; then
+		FIXEDGATEWAY="10.111.11.254"
 	else	
 		FIXEDGATEWAY="$FIXEDGATEWAY.1"
         fi
@@ -357,7 +357,7 @@ WhatMachineTypeAmI () {
                                 DEF_KEY=$PNK_KEY
                                 ISSUE_BANNER="issue.punkadyne"
 				;;
-                        10.100.10)
+                        10.111.11)
                                 MACHINETYPE="Punkadyne"
                                 DEF_KEY=$PNK_KEY
                                 ISSUE_BANNER="issue.punkadyne"				
