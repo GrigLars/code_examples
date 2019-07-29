@@ -1,6 +1,6 @@
 # Examples of my code style
 
-Often, employers want to know my code examples.  Here are some of them.
+Often, employers want to know my code examples.  Here are some of them.  I am great at debugging code or applications, although I would not consider myself a "master programmer," at this time.  As of this writing (2019), I am working on polishing up my python3 skills.
 
 ## aws_report.bash
 Mostrous AWS report which dumps multiple spreadsheets.
