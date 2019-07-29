@@ -13,3 +13,7 @@ An example of perl.  I had to take a data dump of the Netbackup status via a Win
 
 ## check_drive_encryption.py
 Checks my AWS EC2 instances to see if the drive is encrypted or not.  This was part of our HIPAA compliance.
+
+## ru_up.py
+Checks to see what instances are up, and if it can't ssh into them, throw a reason why.  We did this after monthly
+maintenance
