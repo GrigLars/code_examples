@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# VMWare fix - Newest on top
+# VMWare fix 
+# Back from 2012-2016, I worked for a company that had a problem: they had a VMWARE CentOS image that would boot, and then
+#  needed not only to be standardized, but know how to "find itself," including set up its own NIC independently.  Nowadays,
+#  I would fix this with ansible or puppet, but puppet was still not universal due to how our network was isolated, and 
+#  ansible was still too new, too unproven when I started.
 
+# I always had a version, so I knew how old the image or version of the program was.
 VERSION="3.31" # grig@example-company.org 2016-02-01
 # - Removed the "Check host via nslookup
 # - Made a few minor cosmetic changes
@@ -30,20 +35,21 @@ DNS3="[DHCP]"
 MYOLDMAC=$(ip a | grep "link/ether" | awk '{print $2}')
 WHATSMYIP=$(ip a show eth0 | grep "inet " | awk '{print $2}' | cut -d/ -f1)
 MACHINETYPE="Development"
-ISSUE_BANNER="issue.dev"
+ISSUE_BANNER="issue.dev"	# default issue banner
 NIC_MODULE=
 DHCP_HOSTNAME=
 
-# openssl passwd -1 "SomeAwe$$om3 p4$$w3rd"
-
-# Obviously, these (and all other passwords and such) are fake for this example code
+# You would make these by running 
+#   openssl passwd -1 "SomeAwe$$om3 p4$$w3rd"
+# 
+#   Obviously, these (and all other passwords and such) are fake for this example code
 DEV_KEY='$1$HSOIp9Vw$c6SyLTgtseEg555-1212/.'
 STG_KEY='$1$TwRES1NH$T//KNAukTv/555-1212.'
 PRD_KEY='$1$M581o./d$89492IWeOhaSp555-1212/'
 INT_KEY='$1$cEwuaKx1$3xkOSd.PyB3P5l555-1212'
-#Default "duh" key, no not example-company.1234
+# Default "duh" key, no not example-company.1234
 DEF_KEY='$1$5DqGcgG4$2sWe6T11.BdJ4D555-1212/'
-# My stupid throwaway key
+# My stupid throwaway key for testing purposes
 PNK_KEY='$1$ZqE3AQGW$9yupamsK75CRbw555-1212.'
 
 
@@ -57,15 +63,15 @@ CONNECTED_NET_STATUS=0
 #
 
 ### Color schemes for messages to make things look purdy
-Alert () { echo -e "\e[41;33;1m$1\e[0m"; }
-Header () { echo -e "\e[42;37m$1\e[0m"; }
-Info () { echo -e "\e[30;1m$1\e[0m"; }
-Green () { echo -e "\e[32;1m$1\e[0m"; }
-Red () { echo -e "\e[31;1m$1\e[0m"; }
-White () { echo -e "\e[37;1m$1\e[0m"; }
-Yellow () { echo -e "\e[33;1m$1\e[0m"; }
-Magenta () { echo -e "\e[35;1m$1\e[0m"; }
-Cyan () { echo -e "\e[36;1m$1\e[0m"; }
+	Alert () { echo -e "\e[41;33;1m$1\e[0m"; }
+	Header () { echo -e "\e[42;37m$1\e[0m"; }
+	Info () { echo -e "\e[30;1m$1\e[0m"; }
+	Green () { echo -e "\e[32;1m$1\e[0m"; }
+	Red () { echo -e "\e[31;1m$1\e[0m"; }
+	White () { echo -e "\e[37;1m$1\e[0m"; }
+	Yellow () { echo -e "\e[33;1m$1\e[0m"; }
+	Magenta () { echo -e "\e[35;1m$1\e[0m"; }
+	Cyan () { echo -e "\e[36;1m$1\e[0m"; }
 ###
 
 fLog () {
@@ -75,29 +81,26 @@ fLog () {
 }
 
 ShutDownDocker () {
-
+# Some systems had docker, which back then needed to be shut down before updating.
 	service docker stop
 	sleep 2
-
 }
 
 GetUserHostInput () {
-
   read -p "Type in the new host name, WITHOUT domain: " NOOHOST
   read -p "What is the domain for \"$NOOHOST\" [$DEFAULT_DOMAIN]?: " NOODOMAIN
-
   if [ -z $NOODOMAIN ]; then
     NOODOMAIN=$DEFAULT_DOMAIN
   fi
-  
 fLog "Host been declared as $NOOHOST.$NOODOMAIN"
 }
 
 CheckForVMwareNIC () {
-
+# There were two types of NIC that VMWare was serving, and to activate it and assign an IP
+#  I had to know which one it was, or if it wasn't assigned at all.  E1000 was the "old and 
+#  busted," VMXNET3 was the "new hotness"
   E1000=$(lsmod | grep e1000 | awk '{print $1}')
   VMXNET3=$(lsmod | grep vmxnet3 | awk '{print $1}')
-
   echo "E1000 = $E1000"
   echo "VMXNET3 = $VMXNET3"
 
@@ -120,7 +123,7 @@ CheckForVMwareNIC () {
 }
 
 WhatsMyIp () {
-
+# Sometimes the dev machines were ported to QA, and we had to change the address.
   if [ $WHATSMYIP ]; then
 	  echo -n "I already seem to have an IP of "
 	  Alert "$WHATSMYIP"
@@ -132,7 +135,6 @@ WhatsMyIp () {
 		  exit 1
 	  fi
   fi
-
 }
 
 ResetNetNIC () {
