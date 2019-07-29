@@ -1,6 +1,6 @@
 # Examples of my code style
 
-Often, employers want to know my code examples.  Here are some of them.  I am great at debugging code or applications, although I would not consider myself a "master programmer," at this time.  As of this writing (2019), I am working on polishing up my python3 skills.  All of this was my own code, not scripts I altered or something.
+Often, employers want to know my code examples.  Here are some of them.  I am great at debugging code or applications, although I would not consider myself a "master programmer," at this time.  I like and do much better with Linux system administraion, but in the Linux world, you also have to know how to do basic programing and now the DevOps roles certainly demand it.  I prefer to use git and save my scripts or yaml files that way. As of this writing (2019), I am working on polishing up my python3 skills.  All of this was my own code from the ground up, not scripts I found somewhere and altered.
 
 ## aws_report.bash
 A bash script, a mostrous AWS report which dumps multiple spreadsheets and pushes data to a web page.
