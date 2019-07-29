@@ -11,7 +11,7 @@
 #             as well.
 
 # 2009-09-24: Added "PC-X64" to clients list when we added
-#	      exchange.atlantech.net.
+#	      exchange.exampleco.net.
 
 use strict;
 use POSIX qw(strftime);
@@ -75,7 +75,7 @@ use Mail::Sender;
 #  only have policies that *succeeded.*  Note this will also list the ones in
 #  "Suspended," but doesn't assign them a Policy because they never run
 
-my $key=qw(); # "$key" being blahblah.aoi.backup or whatever
+my $key=qw(); # "$key" being blahblah.exampleco.backup or whatever
 foreach $key (sort keys %client_by_OS) {
   $client_total_size_GB{$key}=GetTotalDiskSpaceBackupUsingGB($key);
   $client_exit_status{$key}=GetExitStatus($key);
@@ -283,7 +283,7 @@ sub Create_HTML_Report_Header {
                           );
    print HTML "<center><h3>VERTAS BACKUP REPORT $iso_date<\/h3>";
    # print HTML br();
-   print HTML "created $iso_time on backup.atlantech.net<\/center>\n";
+   print HTML "created $iso_time on backup.exampleco.net<\/center>\n";
    print HTML p();
    my @disk_free_list_C=GetFreeSpaceGB("/home/backup_user/upload/diskfree_c.txt");
    my @disk_free_list_F=GetFreeSpaceGB("/home/backup_user/upload/diskfree_f.txt");   
@@ -329,7 +329,7 @@ sub Create_HTML_Report_Row {
     # $_[0] = Netbackup Customer Name
     # $_[1] = Exit status (0=good, 1=OK, anything else... watch out!)
     # $_[2] = Operating System
-    # $_[3] = Policy (UIX, AOI, etc)
+    # $_[3] = Policy (UIX, Exampleco, etc)
     # $_[4] = Veritas backup ID (used for tracking)
     # $_[5] = Backup type (Daily, weekly, monthly, etc)
     # $_[6] = Date/Time of backup
@@ -524,7 +524,7 @@ sub MailAdminReport {
 #  $_[0] would be any extra warning we decide to toss in.
 
   my $fortune_cookie=GetFortune();
-  my $smtp_server="wsmtp.atlantech.net";
+  my $smtp_server="wsmtp.exampleco.net";
   my $iso_date=strftime("%Y-%m-%d",localtime);
   my $mail_subject="Daily Veritas Backup Report $iso_date";
   my $mail_body="Good morning,
@@ -540,15 +540,15 @@ $disk_stats
 $fortune_cookie
 
 :: Signed,
-:: backups.atlantech.net
+:: backups.exampleco.net
 --------------------------
 :: \"Your plastic pal who\'s fun to be with.\"";
 
-  my $sender = new Mail::Sender {smtp => 'wsmtp.atlantech.net',
-                                 from => 'hosting@atlantech.net'};
-  # $sender->MailFile({to => 'hosting@atlantech.net',
-  #$sender->MailFile({to => 'hosting@atlantech.net,hfchou@atlantech.net',
-  $sender->MailFile({to => 'support@atlantech.net',
+  my $sender = new Mail::Sender {smtp => 'wsmtp.exampleco.net',
+                                 from => 'hosting@exampleco.net'};
+  # $sender->MailFile({to => 'hosting@exampleco.net',
+  #$sender->MailFile({to => 'hosting@exampleco.net,hfchou@exampleco.net',
+  $sender->MailFile({to => 'support@exampleco.net',
                     # replyto => 'SystemAdministrators',
                     subject => $mail_subject,
                     msg => $mail_body,
@@ -620,7 +620,7 @@ sub ExportToDatabase {
 # $_[3] =  number of files backed up
 # $_[4] =  GB of current backup
 # $_[5] =  GB of Total backups for that clientID
-# $_[6] =  policy (AOI-UNIX-1, etc)
+# $_[6] =  policy (UNIX-1, etc)
 # $_[7] =  shedule label (Daily, weekly, monthly)
 
 # Databese used to be at 209.190.220.102
