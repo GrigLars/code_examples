@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 #
-# [   [  [ [[ AOI BACKUP REPORT GENERATOR ]] ]  ]   ]
+# [   [  [ [[ BACKUP REPORT GENERATOR ]] ]  ]   ]
 #
-# written by Grig Larson, 2005, for Atlantech Online, Inc.
+# written by Grig Larson, 2005, for Example Company, Inc.
 #
 
 # 2007-05-10: Due to Veritas fucking up perli on STEL10,
