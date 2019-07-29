@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-# This gets api keys
+# We did monthly maintenence, and sometimes we wanted to make sure that the systems were up before we called "all clear"
+#   to the dev team
+
 import boto3
 import time
 # import pprint
@@ -12,6 +14,8 @@ private_key_location="/home/glarson/.ssh/devops.pem"
 login_name="ubuntu"
 ssh_options="ConnectTimeout=5 -o StrictHostKeyChecking=no"
 
+# Some we *know* we can't ssh into ahead of time, either because they have different keys, didnt have ssh running,
+#   or were on a different network segment not reacahable and we checked that in other ways.
 exceptions = {
               "192.168.48.8":"Windows box",
               "192.168.48.6":"Windows box",
@@ -63,4 +67,4 @@ for instance in instances:
 # i-03c3e49008bcef810 eks-1                          running  10.7.3.17       Connect error
 # i-0530c679efb1620ce adc2                           running  192.168.8.13    Windows box
 # i-0659cb46fb6614db2 ManageEngine-shared            running  192.168.10.107  Windows box
-
+# [ ... and so on ...]
