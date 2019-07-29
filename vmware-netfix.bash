@@ -6,6 +6,9 @@
 #  I would fix this with ansible or puppet, but puppet was still not universal due to how our network was isolated, and 
 #  ansible was still too new, too unproven when I started.
 
+# Every so often, I would re-do the Linux image, which would have updated packages, the newest version of this 
+#   script, and so on.
+
 # I always had a version, so I knew how old the image or version of the program was.
 VERSION="3.31" # grig@example-company.org 2016-02-01
 # - Removed the "Check host via nslookup
@@ -138,9 +141,10 @@ WhatsMyIp () {
 }
 
 ResetNetNIC () {
-
+# Here was the original reason for this script.  The UDEV rules at the time would reboot and detect a new NIC
+#  **all the time** and then put it at eth1.  This script would blow away the rules and "rediscover" the NIC
+#  to assure that it would be on the right interface (eth0) and not just add a new one.
   read -p "If this machine will get an IP by DHCP, just hit RETURN (type \"F\" to set IP manually): " IPTYPE
-  
   
   if [ -z $IPTYPE ]; then
         IPTYPE="DHCP"
@@ -300,6 +304,8 @@ echo "exit 0" $MakeFixedIPScriptPATH
 }
 
 WhatMachineTypeAmI () {
+# In this compnay, the networks were segregated, so if you knew what IP address you had, you knew what kind of machine
+#   you should be.
   IPADDR=$(ip a show eth0 | grep "inet " | awk '{print $2}' | cut -d/ -f1)
   VLANIP=$(echo $IPADDR | cut -d. -f1,2,3)
       case $VLANIP in
@@ -320,7 +326,7 @@ WhatMachineTypeAmI () {
                         10.1.7)
                                 MACHINETYPE="Production"
                                 DEF_KEY=$PRD_KEY
-			        ISSUE_BANNER="issue.prod"
+			                          ISSUE_BANNER="issue.prod"
                                 ;;
                         192.168.103)
                                 MACHINETYPE="Staging"
@@ -371,14 +377,11 @@ WhatMachineTypeAmI () {
 }
 
 SetSNMPSettings () {
-
   Info "Changing SNMP Settings...."
-  
   SNMPID=$(echo $IPADDR | cut -d. -f1)
   SNMPDCOMMUNITY='
 rocommunity EXAMPLCOMonpubl # snmpd.conf string EXAMPLCOMonpubl for all 10.1.x.x networks
 '
-
     if [ "$SNMPID" == "192" ]; then
     SNMPDCOMMUNITY='
 rocommunity 3XT_3XMPL-CO-Mon # snmpd.conf string 3XT_3XMPL-CO-Mon for all 192.168.x.x networks
@@ -390,7 +393,7 @@ rocommunity 3XT_3XMPL-CO-Mon # snmpd.conf string 3XT_3XMPL-CO-Mon for all 192.16
 }
 
 CreateOrionUser () {
-
+# We had orion monitoring 
   echo -e "\nI am a \e[33m Creating orion user...\e[m"
   TEMPYN=$(grep orion /etc/passwd)
   if [ $TEMPYN ]; then
@@ -406,15 +409,21 @@ CreateOrionUser () {
 }
 
 ChangePassword () {
-
   echo -e "\nI am a \e[33m >> $MACHINETYPE <<\e[m machine!  Changing password...\n"
   usermod --pass="$DEF_KEY" root
   fLog "Password changed as a $MACHINETYPE server"
   sleep 1
-
 }
 
 AuditUsers () {
+# This removed ANYONE not allowed on production or staging systems.  The rule was 
+#  dev = admin users, all developers
+#  qa = admin users, all developers
+#  staging = admin users only, test and QA folks only in special cases
+#  production = admin users only
+#  
+#  So if a user, "dev1" was on the dev machines, and it got cloned to staging, they'd be automatically removed.
+#  This prevented them from logging in, or having a process running under their name
 
   if [ "$MACHINETYPE" == "Staging" -o "$MACHINETYPE" == "Production" ]
   then
@@ -531,7 +540,7 @@ SetMOTD () {
 }
 
 CheckMySQL () {
-
+# This was in progress, but we had another manageent tool that the DBAs used that was better for them.
   CHECKMYSQL=$(chkconfig --list | grep mysqld)
 
   if [ $CHECKMYSQL ]; then
