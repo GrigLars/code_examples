@@ -6,6 +6,9 @@
 #  I would fix this with ansible or puppet, but puppet was still not universal due to how our network was isolated, and 
 #  ansible was still too new, too unproven when I started.
 
+# Every so often, I would re-do the Linux image, which would have updated packages, the newest version of this 
+#   script, and so on.
+
 # I always had a version, so I knew how old the image or version of the program was.
 VERSION="3.31" # grig@example-company.org 2016-02-01
 # - Removed the "Check host via nslookup
