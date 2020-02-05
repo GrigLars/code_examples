@@ -89,6 +89,7 @@ done
 
 # Copy over the temp file to the transport file, re-run postmap, and reload the mail server.  In main.cf, you need
 #   transport_maps = hash:/etc/postfix/transport
+# See http://www.postfix.org/transport.5.html
 
 cp ${TEMP_TRANSPORT} /etc/postfix/transport
 postmap /etc/postfix/transport
