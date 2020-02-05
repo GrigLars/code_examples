@@ -7,6 +7,8 @@
 #   would send our sender reputation down.  We looked like a spammer because we would send a lot of mail
 #   to a single address that didn't exist or didn't read them. So I needed a way to filter out all bounced
 #   emails automatically.
+
+# Run via /bin/bash /root/mail_bounced.bash | mail -s "Bounced and Discarded mail on $(hostname) on $(date)" ${mail_add} -r no-reply@example.com
 #
 # This was used alongside pflogsumm: http://jimsun.linxnet.com/postfix_contrib.html and run daily
 
