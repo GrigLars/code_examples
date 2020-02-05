@@ -17,6 +17,9 @@ Python that checks my AWS EC2 instances to see if the drive is encrypted or not.
 ## get_access_keys.bash
 Bash script that reports outdated AWS API keys 
 
+## postfix_bounced_mail.bash
+Bash script that scans your postfix logs, looks for bounced or discarded mails, and filters them out from being sent again.  This is helpful when you need a good sender reputation.
+
 ## ru_up.py
 Small python that checks to see what instances are up, and if it can't ssh into them, throw a reason why.  We did this after monthly
 maintenance
